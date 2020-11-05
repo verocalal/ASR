@@ -1,0 +1,31 @@
+#!/bin/bash
+numC=$(ls -a "/root/alerta" | wc -l)
+let numC=$numC-2;
+cont=1;
+while [ $cont -le $numC ];
+do
+      let cont=$cont+1;
+      
+      direc=$(ls -a "/root/alerta" | sed 1,"$cont"d | head -n1)
+      numF=$(find "/root/alerta/$direc" -type f | wc -l)
+      if [ $numF -gt 1 ]; then
+        fichero=$(find "/root/alerta/$direc" -type f | head -n1)
+        contF=1;
+        while [ $contF -le $numF ];
+        do
+                ficheroAux=$(find "/root/alerta/$direc" -type f | sed 1,"$contF"d | head -n$)
+                dateF=$(stat $fichero | grep Modify | awk '{print $z}')
+                dateA=$(stat $fichero | grep Modify | awk '{print $z}')
+                if [ $dateF -lt $dateA ]; then
+                      #rm -m $fichero
+                      fichero=$ficheroAux
+                      echo $fichero
+                elif [ $dateF -gt $dateA ]; then
+                      #rm -m $ficheroAux
+                      echo "err"
+                fi
+                let contF=$contF+1;
+        done
+      fi
+done
+#if("00:30" -eq &(date +%R))
