@@ -1,0 +1,25 @@
+from os import scandir
+from glob import glob
+
+word_count = 0
+list = [];
+
+print("Introducir direccion del directorio")
+path = input()
+
+try:
+    for obj in scandir(path):
+        if obj.is_file():
+            list.append(obj.name)
+
+    list.sort()
+
+    for nombre in list:
+        with open(path + '/' + nombre, 'r') as f:
+            for line in f:
+                word_count += len(line.split())
+                print(nombre, "--> Numero de palabras: ", word_count)
+                word_count = 0
+
+except:
+    print("Error")
